@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Заказ №{{ order.order_number }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Заказ №{{ order.order_number }}</h1>
+        <a href="{% url 'order_list' %}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i> Назад к заказам
+        </a>
+    </div>
+    
+    <div class="row">
+        <!-- Детали заказа -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Детали заказа</h5>
+                    <span class="badge {% if order.status == 'pending' %}bg-warning text-dark{% elif order.status == 'processing' %}bg-info text-dark{% elif order.status == 'shipped' %}bg-primary{% elif order.status == 'delivered' %}bg-success{% elif order.status == 'cancelled' %}bg-danger{% endif %} py-2 px-3">
+                        {{ order.get_status_display }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Дата заказа:</strong></p>
+                            <p>{{ order.created_at|date:"d.m.Y H:i" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Дата обновления:</strong></p>
+                            <p>{{ order.updated_at|date:"d.m.Y H:i" }}</p>
+                        </div>
+                    </div>
+                    
+                    <h6 class="mb-3">Товары:</h6>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Товар</th>
+                                    <th>Цена</th>
+                                    <th>Количество</th>
+                                    <th>Сумма</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.items.all %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;">
+                                            <a href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a>
+                                        </div>
+                                    </td>
+                                    <td>{{ item.price }} ₽</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.total_price }} ₽</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-end"><strong>Подытог:</strong></td>
+                                    <td>{{ order.subtotal }} ₽</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-end"><strong>Доставка:</strong></td>
+                                    <td>{{ order.shipping_cost }} ₽</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-end"><strong>Итого:</strong></td>
+                                    <td><strong>{{ order.total }} ₽</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Данные доставки -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Данные доставки</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-1"><strong>Имя:</strong></p>
+                    <p>{{ order.first_name }} {{ order.last_name }}</p>
+                    
+                    <p class="mb-1"><strong>Email:</strong></p>
+                    <p>{{ order.email }}</p>
+                    
+                    <p class="mb-1"><strong>Телефон:</strong></p>
+                    <p>{{ order.phone }}</p>
+                    
+                    <p class="mb-1"><strong>Адрес:</strong></p>
+                    <p>{{ order.address }}, {{ order.city }}, {{ order.postal_code }}, {{ order.country }}</p>
+                </div>
+            </div>
+            
+            {% if user.profile.telegram_chat_id %}
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Telegram-уведомления</h5>
+                </div>
+                <div class="card-body">
+                    <p>Уведомления о статусе заказа отправляются на ваш Telegram.</p>
+                    <p class="mb-0"><strong>Подключенный аккаунт:</strong> {{ user.profile.telegram_username }}</p>
+                </div>
+            </div>
+            {% else %}
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Telegram-уведомления</h5>
+                </div>
+                <div class="card-body">
+                    <p>Подключите Telegram для получения уведомлений о статусе заказа.</p>
+                    <a href="{% url 'profile' %}" class="btn btn-outline-primary">
+                        <i class="fab fa-telegram me-2"></i> Подключить Telegram
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Оформление заказа{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Оформление заказа</h1>
+    
+    <div class="row">
+        <!-- Форма заказа -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Данные доставки</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'place_order' %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.first_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.last_name|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.email|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.phone|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            {{ form.address|as_crispy_field }}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.city|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.postal_code|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            {{ form.country|as_crispy_field }}
+                        </div>
+                        <hr class="my-4">
+                        <h5 class="mb-3">Способ оплаты</h5>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" id="payment1" value="cash" checked>
+                            <label class="form-check-label" for="payment1">
+                                Наличными при получении
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" id="payment2" value="card">
+                            <label class="form-check-label" for="payment2">
+                                Картой при получении
+                            </label>
+                        </div>
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="radio" name="payment_method" id="payment3" value="online">
+                            <label class="form-check-label" for="payment3">
+                                Онлайн-оплата (сейчас недоступно)
+                            </label>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Оформить заказ</button>
+                            <a href="{% url 'cart' %}" class="btn btn-outline-secondary">Вернуться в корзину</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Итого -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Ваш заказ</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="mb-3">Товары в корзине:</h6>
+                    {% for item in cart_items %}
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>{{ item.product.name }} &times; {{ item.quantity }}</span>
+                        <span>{{ item.total_price }} ₽</span>
+                    </div>
+                    {% endfor %}
+                    <hr>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Подытог:</span>
+                        <span>{{ subtotal }} ₽</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Доставка:</span>
+                        <span>{{ shipping_cost }} ₽</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5>Итого:</h5>
+                        <h5>{{ total }} ₽</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

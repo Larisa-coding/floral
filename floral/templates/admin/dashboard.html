@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Админ-панель{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Панель администратора</h1>
+    
+    <!-- Общая статистика -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-4">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">Заказы</h5>
+                            <h2 class="mb-0">{{ total_orders }}</h2>
+                        </div>
+                        <i class="fas fa-shopping-bag fa-3x opacity-50"></i>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between bg-primary border-0">
+                    <a href="{% url 'admin_orders' %}" class="text-white text-decoration-none">Подробнее</a>
+                    <i class="fas fa-arrow-circle-right text-white"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">Выручка</h5>
+                            <h2 class="mb-0">{{ total_revenue }} ₽</h2>
+                        </div>
+                        <i class="fas fa-ruble-sign fa-3x opacity-50"></i>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between bg-success border-0">
+                    <a href="{% url 'admin_orders' %}" class="text-white text-decoration-none">Подробнее</a>
+                    <i class="fas fa-arrow-circle-right text-white"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card bg-info text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">Товары</h5>
+                            <h2 class="mb-0">{{ total_products }}</h2>
+                        </div>
+                        <i class="fas fa-flower-daffodil fa-3x opacity-50"></i>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between bg-info border-0">
+                    <a href="{% url 'admin_products' %}" class="text-white text-decoration-none">Подробнее</a>
+                    <i class="fas fa-arrow-circle-right text-white"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card bg-warning text-dark h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">Пользователи</h5>
+                            <h2 class="mb-0">{{ total_users }}</h2>
+                        </div>
+                        <i class="fas fa-users fa-3x opacity-50"></i>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between bg-warning border-0">
+                    <a href="{% url 'admin_users' %}" class="text-white text-decoration-none">Подробнее</a>
+                    <i class="fas fa-arrow-circle-right text-white"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Статистика заказов -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Статистика заказов</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6>Статусы заказов</h6>
+                        <div class="progress mb-2" style="height: 25px;">
+                            <div class="progress-bar bg-warning text-dark" role="progressbar" style="width: {{ pending_percent }}%" aria-valuenow="{{ pending_percent }}" aria-valuemin="0" aria-valuemax="100">
+                                В ожидании ({{ pending_count }})
+                            </div>
+                        </div>
+                        <div class="progress mb-2" style="height: 25px;">
+                            <div class="progress-bar bg-info text-dark" role="progressbar" style="width: {{ processing_percent }}%" aria-valuenow="{{ processing_percent }}" aria-valuemin="0" aria-valuemax="100">
+                                В обработке ({{ processing_count }})
+                            </div>
+                        </div>
+                        <div class="progress mb-2" style="height: 25px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ shipped_percent }}%" aria-valuenow="{{ shipped_percent }}" aria-valuemin="0" aria-valuemax="100">
+                                Отправлен ({{ shipped_count }})
+                            </div>
+                        </div>
+                        <div class="progress mb-2" style="height: 25px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ delivered_percent }}%" aria-valuenow="{{ delivered_percent }}" aria-valuemin="0" aria-valuemax="100">
+                                Доставлен ({{ delivered_count }})
+                            </div>
+                        </div>
+                        <div class="progress mb-2" style="height: 25px;">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: {{ cancelled_percent }}%" aria-valuenow="{{ cancelled_percent }}" aria-valuemin="0" aria-valuemax="100">
+                                Отменен ({{ cancelled_count }})
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Последние заказы -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Последние заказы</h5>
+                    <a href="{% url 'admin_orders' %}" class="btn btn-sm btn-outline-primary">Все заказы</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>№ заказа</th>
+                                    <th>Клиент</th>
+                                    <th>Сумма</th>
+                                    <th>Статус</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recent_orders %}
+                                <tr>
+                                    <td>{{ order.order_number }}</td>
+                                    <td>{{ order.first_name }} {{ order.last_name }}</td>
+                                    <td>{{ order.total }} ₽</td>
+                                    <td>
+                                        {% if order.status == 'pending' %}
+                                        <span class="badge bg-warning text-dark">{{ order.get_status_display }}</span>
+                                        {% elif order.status == 'processing' %}
+                                        <span class="badge bg-info text-dark">{{ order.get_status_display }}</span>
+                                        {% elif order.status == 'shipped' %}
+                                        <span class="badge bg-primary">{{ order.get_status_display }}</span>
+                                        {% elif order.status == 'delivered' %}
+                                        <span class="badge bg-success">{{ order.get_status_display }}</span>
+                                        {% elif order.status == 'cancelled' %}
+                                        <span class="badge bg-danger">{{ order.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'admin_order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

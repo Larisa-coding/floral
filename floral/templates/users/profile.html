@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Мой профиль{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Мой профиль</h1>
+    
+    <div class="row">
+        <!-- Основные данные -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Личные данные</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ u_form.username|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ u_form.email|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ u_form.first_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ u_form.last_name|as_crispy_field }}
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <h5 class="mb-3">Контактная информация</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ p_form.phone|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ p_form.country|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ p_form.city|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ p_form.postal_code|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            {{ p_form.address|as_crispy_field }}
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Дополнительные функции -->
+        <div class="col-md-4">
+            <!-- Telegram -->
+            <div class="card mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Telegram-уведомления</h5>
+                </div>
+                <div class="card-body">
+                    {% if telegram_connected %}
+                    <div class="alert alert-success">
+                        <i class="fab fa-telegram me-2"></i> Telegram подключен!
+                    </div>
+                    <p><strong>Аккаунт:</strong> {{ telegram_username }}</p>
+                    <p>Вы будете получать уведомления о статусе заказов в Telegram.</p>
+                    <form action="{% url 'telegram_connect' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class="fas fa-unlink me-2"></i> Отключить Telegram
+                        </button>
+                    </form>
+                    {% else %}
+                    <p>Подключите Telegram для получения уведомлений о статусе заказов:</p>
+                    <ol class="mb-4">
+                        <li>Найдите бота <a href="https://t.me/your_bot_name" target="_blank">@your_bot_name</a> в Telegram</li>
+                        <li>Отправьте боту следующий код:</li>
+                    </ol>
+                    <div class="alert alert-primary text-center mb-3">
+                        <h4 class="mb-0">{{ telegram_code }}</h4>
+                    </div>
+                    <form action="{% url 'telegram_connect' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-sync-alt me-2"></i> Сгенерировать новый код
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Безопасность -->
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Безопасность</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'password_reset' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-key me-2"></i> Сменить пароль
+                        </a>
+                        <a href="{% url 'order_list' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-shopping-bag me-2"></i> История заказов
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

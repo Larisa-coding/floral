@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Контакты{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Контакты</h1>
+    
+    <div class="row">
+        <!-- Контактная информация -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Наши контакты</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-map-marker-alt fa-2x text-primary me-3"></i>
+                        </div>
+                        <div>
+                            <h5>Адрес</h5>
+                            <p class="mb-0">г. Москва, ул. Цветочная, 12</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-phone fa-2x text-primary me-3"></i>
+                        </div>
+                        <div>
+                            <h5>Телефон</h5>
+                            <p class="mb-0"><a href="tel:+74951234567" class="text-decoration-none">+7 (495) 123-45-67</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-envelope fa-2x text-primary me-3"></i>
+                        </div>
+                        <div>
+                            <h5>Email</h5>
+                            <p class="mb-0"><a href="mailto:info@flowers.ru" class="text-decoration-none">info@flowers.ru</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-clock fa-2x text-primary me-3"></i>
+                        </div>
+                        <div>
+                            <h5>Время работы</h5>
+                            <p class="mb-0">Ежедневно с 8:00 до 20:00</p>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mb-3">Мы в социальных сетях</h5>
+                    <div class="d-flex">
+                        <a href="#" class="btn btn-outline-primary me-2">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary me-2">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary me-2">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Форма обратной связи -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Напишите нам</h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Ваше имя</label>
+                            <input type="text" class="form-control" id="name" placeholder="Иван Иванов">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="example@mail.ru">
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Телефон</label>
+                            <input type="tel" class="form-control" id="phone" placeholder="+7 (000) 000-00-00">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Сообщение</label>
+                            <textarea class="form-control" id="message" rows="5" placeholder="Ваше сообщение..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Отправить сообщение</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Карта -->
+    <div class="card mb-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0">Мы на карте</h5>
+        </div>
+        <div class="card-body p-0">
+            <div style="height: 400px; background-color: #eee; display: flex; align-items: center; justify-content: center;">
+                <p class="text-muted">Здесь будет карта с местоположением магазина</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
