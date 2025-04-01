@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Подключение Telegram - Цветочный Магазин{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Подключение Telegram</h1>
+
+    <div class="row">
+        <!-- Profile Navigation -->
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Навигация</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'profile' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user me-2"></i> Профиль
+                    </a>
+                    <a href="{% url 'update_profile' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-edit me-2"></i> Редактировать профиль
+                    </a>
+                    <a href="{% url 'update_shipping' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-truck me-2"></i> Адрес доставки
+                    </a>
+                    <a href="{% url 'change_password' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-key me-2"></i> Изменить пароль
+                    </a>
+                    <a href="{% url 'order_list' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-shopping-bag me-2"></i> Мои заказы
+                    </a>
+                    <a href="{% url 'connect_telegram' %}" class="list-group-item list-group-item-action active">
+                        <i class="fab fa-telegram me-2"></i> Подключить Telegram
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Telegram Connection -->
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Подключение Telegram</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h4 class="alert-heading"><i class="fab fa-telegram me-2"></i> Получайте уведомления в Telegram</h4>
+                        <p>Подключите свой аккаунт Telegram, чтобы получать мгновенные уведомления о статусе ваших заказов и специальных предложениях.</p>
+                    </div>
+
+                    <div class="mt-4">
+                        <h5>Шаги для подключения:</h5>
+                        <ol class="mb-4">
+                            <li class="mb-2">Найдите бота <a href="https://t.me/flowersdeliveryshop_bot" target="_blank" class="text-decoration-none">@flowersdeliveryshop_bot</a> в Telegram или нажмите на ссылку для открытия чата</li>
+                            <li class="mb-2">Отправьте боту следующий код активации:</li>
+                        </ol>
+
+                        {% if activation_code %}
+                            <div class="alert alert-primary text-center py-4 mb-4">
+                                <h3 class="mb-0">{{ activation_code }}</h3>
+                            </div>
+
+                            <div class="text-center mb-4">
+                                <p>Код активации действителен в течение 24 часов</p>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-primary">
+                                        <i class="fas fa-sync-alt me-2"></i> Сгенерировать новый код
+                                    </button>
+                                </form>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-danger text-center py-4 mb-4">
+                                <h5 class="mb-0">Не удалось создать код активации</h5>
+                                <p class="mb-0 mt-2">Попробуйте обновить страницу или обратитесь в службу поддержки</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mt-4">
+                        <h5>После подключения Telegram вы будете получать:</h5>
+                        <ul>
+                            <li>Уведомления о новых статусах заказов</li>
+                            <li>Информацию о скидках и специальных предложениях</li>
+                            <li>Напоминания о важных событиях</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <a href="{% url 'profile' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i> Вернуться в профиль
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

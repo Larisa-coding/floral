@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}История заказов{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="mb-3">История заказов</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'profile' %}">Мой профиль</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">История заказов</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    {% if orders %}
+        <div class="row">
+            <div class="col-12">
+                <!-- Фильтр для заказов -->
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body">
+                        <form method="get" class="row g-3 align-items-end">
+                            <div class="col-md-4">
+                                <label for="status" class="form-label">Статус заказа</label>
+                                <select name="status" id="status" class="form-select">
+                                    <option value="">Все статусы</option>
+                                    <option value="pending" {% if status == 'pending' %}selected{% endif %}>В ожидании</option>
+                                    <option value="processing" {% if status == 'processing' %}selected{% endif %}>В обработке</option>
+                                    <option value="shipped" {% if status == 'shipped' %}selected{% endif %}>Отправлен</option>
+                                    <option value="delivered" {% if status == 'delivered' %}selected{% endif %}>Доставлен</option>
+                                    <option value="cancelled" {% if status == 'cancelled' %}selected{% endif %}>Отменен</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="date_from" class="form-label">С даты</label>
+                                <input type="date" name="date_from" id="date_from" class="form-control" value="{{ date_from|date:'Y-m-d' }}">
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-filter me-2"></i>Применить фильтр
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Список заказов -->
+                {% for order in orders %}
+                <div class="card mb-4 border-0 shadow-sm order-card">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0">Заказ №{{ order.order_number }}</h5>
+                            <p class="text-muted mb-0 small">
+                                <i class="far fa-calendar-alt me-1"></i> {{ order.created_at|date:"d.m.Y" }}
+                            </p>
+                        </div>
+                        <div>
+                            {% if order.status == 'pending' %}
+                                <span class="badge bg-warning text-dark">В ожидании</span>
+                            {% elif order.status == 'processing' %}
+                                <span class="badge bg-info text-dark">В обработке</span>
+                            {% elif order.status == 'shipped' %}
+                                <span class="badge bg-primary">Отправлен</span>
+                            {% elif order.status == 'delivered' %}
+                                <span class="badge bg-success">Доставлен</span>
+                            {% elif order.status == 'cancelled' %}
+                                <span class="badge bg-danger">Отменен</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8 mb-3 mb-md-0">
+                                <h6 class="text-muted mb-3">Информация о заказе</h6>
+                                <div class="row g-3">
+                                    <div class="col-6 col-md-6">
+                                        <p class="mb-1 text-muted small">Имя получателя</p>
+                                        <p class="mb-3">{{ order.first_name }} {{ order.last_name }}</p>
+                                    </div>
+                                    <div class="col-6 col-md-6">
+                                        <p class="mb-1 text-muted small">Контакты</p>
+                                        <p class="mb-3">{{ order.phone }}<br>{{ order.email }}</p>
+                                    </div>
+                                    <div class="col-12">
+                                        <p class="mb-1 text-muted small">Адрес доставки</p>
+                                        <p class="mb-0">{{ order.address }}, {{ order.city }}, {{ order.postal_code }}, {{ order.country }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-muted mb-3">Стоимость</h6>
+                                <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
+                                    <span>Товары:</span>
+                                    <span class="fw-bold">{{ order.subtotal }} ₽</span>
+                                </div>
+                                <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
+                                    <span>Доставка:</span>
+                                    <span class="fw-bold">{{ order.shipping_cost }} ₽</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-bold">Итого:</span>
+                                    <span class="fw-bold text-primary h5 mb-0">{{ order.total }} ₽</span>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Товар</th>
+                                        <th class="text-center">Количество</th>
+                                        <th class="text-end">Цена</th>
+                                        <th class="text-end">Сумма</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in order.items.all %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                {% if item.product.image %}
+                                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" 
+                                                        class="img-thumbnail me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                                {% endif %}
+                                                <div>
+                                                    <h6 class="mb-0">{{ item.product.name }}</h6>
+                                                    <small class="text-muted">{{ item.product.category.name }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center align-middle">{{ item.quantity }}</td>
+                                        <td class="text-end align-middle">{{ item.price }} ₽</td>
+                                        <td class="text-end align-middle fw-bold">{{ item.total_price }} ₽</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{% url 'order_detail' order.id %}" class="btn btn-outline-primary">
+                                <i class="fas fa-eye me-2"></i>Подробности заказа
+                            </a>
+                            {% if order.status == 'pending' %}
+                            <button type="button" class="btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#cancelOrder{{ order.id }}">
+                                <i class="fas fa-times me-2"></i>Отменить заказ
+                            </button>
+                            
+                            <!-- Модальное окно для отмены заказа -->
+                            <div class="modal fade" id="cancelOrder{{ order.id }}" tabindex="-1" aria-labelledby="cancelOrderLabel{{ order.id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="cancelOrderLabel{{ order.id }}">Подтверждение отмены</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Вы уверены, что хотите отменить заказ №{{ order.order_number }}?</p>
+                                            <p class="text-danger">Это действие нельзя будет отменить.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                            <form action="{% url 'cancel_order' order.id %}" method="post" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">Подтвердить отмену</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <!-- Пагинация -->
+                {% if orders.has_other_pages %}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if orders.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ orders.previous_page_number }}{% if status %}&status={{ status }}{% endif %}{% if date_from %}&date_from={{ date_from|date:'Y-m-d' }}{% endif %}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">&laquo;</span>
+                            </li>
+                        {% endif %}
+                        
+                        {% for i in orders.paginator.page_range %}
+                            {% if orders.number == i %}
+                                <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ i }}{% if status %}&status={{ status }}{% endif %}{% if date_from %}&date_from={{ date_from|date:'Y-m-d' }}{% endif %}">{{ i }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if orders.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ orders.next_page_number }}{% if status %}&status={{ status }}{% endif %}{% if date_from %}&date_from={{ date_from|date:'Y-m-d' }}{% endif %}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">&raquo;</span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-shopping-bag text-primary display-4 mb-3"></i>
+                        <h3 class="mb-3">У вас еще нет заказов</h3>
+                        <p class="text-muted mb-4">Просмотрите наш каталог и выберите что-нибудь для себя или близких</p>
+                        <a href="{% url 'product_list' %}" class="btn btn-primary">
+                            <i class="fas fa-shopping-cart me-2"></i>Перейти в каталог
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .order-card {
+        transition: transform 0.2s ease;
+    }
+    .order-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+</style>
+{% endblock %}

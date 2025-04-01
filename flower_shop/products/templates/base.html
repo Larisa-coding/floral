@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Floral&Petal{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Собственные стили -->
+    <style>
+        :root {
+            --primary-color: #e84a5f;
+            --secondary-color: #2a363b;
+            --accent-color: #ff847c;
+            --light-color: #fecea8;
+            --white-color: #ffffff;
+            --gray-color: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--secondary-color);
+            background-color: var(--white-color);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .navbar {
+            background-color: var(--white-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .nav-link {
+            color: var(--secondary-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #d43e53;
+            border-color: #d43e53;
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .footer {
+            background-color: var(--secondary-color);
+            color: var(--white-color);
+            padding: 3rem 0;
+        }
+
+        .footer a {
+            color: var(--light-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: var(--white-color);
+            text-decoration: underline;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-img {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .category-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 150px;
+        }
+
+        .category-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .category-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            padding: 1rem;
+        }
+
+        .category-title {
+            color: white;
+            margin: 0;
+        }
+
+        .hero-section {
+            background-color: var(--light-color);
+            padding: 5rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-color);
+            bottom: -10px;
+            left: 0;
+        }
+
+        /* Изменение стандартных цветов Bootstrap */
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #d43e53;
+            text-decoration: underline;
+        }
+
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+
+        .bg-primary {
+            background-color: var(--primary-color) !important;
+        }
+
+        .border-primary {
+            border-color: var(--primary-color) !important;
+        }
+
+        /* Переопределение фокуса форм */
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(232, 74, 95, 0.25);
+        }
+
+        /* Переопределение навигационных элементов */
+        .pagination .page-link {
+            color: var(--primary-color);
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--white-color);
+        }
+
+        .breadcrumb-item a {
+            color: var(--primary-color);
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "›";
+        }
+
+        .breadcrumb-item.active {
+            color: var(--primary-color);
+        }
+
+        /* Изменение цвета иконок */
+        main .fas, main .far, main .fab, main .fa {
+            color: var(--primary-color);
+        }
+
+        .navbar-brand .fas {
+            color: var(--primary-color);
+        }
+
+        .footer .fas, .footer .far, .footer .fab, .footer .fa {
+            color: var(--light-color);
+        }
+
+        /* Иконки в подвале не должны быть розовыми */
+        .footer a:hover .fas,
+        .footer a:hover .far,
+        .footer a:hover .fab,
+        .footer a:hover .fa {
+            color: var(--white-color);
+        }
+
+        /* Цвет активных вкладок навигации */
+        .nav-pills .nav-link.active,
+        .nav-pills .show > .nav-link {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+        }
+
+        /* Стили для выпадающего меню */
+        .dropdown-item:active,
+        .dropdown-item:focus,
+        .dropdown-item:hover {
+            background-color: var(--accent-color);
+            color: var(--white-color);
+        }
+
+        /* Стилизация социальных иконок */
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            transition: all 0.3s ease;
+            background-color: transparent;
+            margin-right: 10px;
+        }
+
+        .social-icon:hover {
+            color: white;
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(232, 74, 95, 0.3);
+            text-decoration: none;
+        }
+
+        .footer .social-icon {
+            color: var(--light-color);
+            border-color: var(--light-color);
+        }
+
+        .footer .social-icon:hover {
+            color: var(--secondary-color);
+            background-color: var(--light-color);
+        }
+
+        /* Стилизация круглых кнопок в формах */
+        .btn-outline-primary.rounded-circle {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary.rounded-circle:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(232, 74, 95, 0.3);
+        }
+
+        /* Custom alerts */
+        .alert-success {
+            background-color: #d1e7dd;
+            border-color: #badbcc;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c2c7;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <i class="fas fa-seedling me-2" style="color: var(--primary-color);"></i>Floral&Petal
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">Главная</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if 'products' in request.path %}active{% endif %}" href="{% url 'product_list' %}">Каталог</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/about/' %}active{% endif %}" href="{% url 'about' %}">О нас</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}" href="{% url 'contact' %}">Контакты</a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item me-3">
+                            <a class="nav-link cart-icon" href="{% url 'cart' %}">
+                                <i class="fas fa-shopping-cart" style="color: var(--secondary-color);"></i>
+                                {% if user.is_authenticated and user.cart.total_items > 0 %}
+                                <span class="cart-count">{{ user.cart.total_items }}</span>
+                                {% endif %}
+                            </a>
+                        </li>
+
+                        {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-1" style="color: var(--secondary-color);"></i>{{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url 'profile' %}">Мой профиль</a></li>
+                                <li><a class="dropdown-item" href="{% url 'order_list' %}">Мои заказы</a></li>
+                                {% if user.is_staff %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'admin_dashboard' %}">Админ-панель</a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="btn btn-outline-primary" href="{% url 'login' %}">Войти</a>
+                        </li>
+                        <li class="nav-item ms-2">
+                            <a class="btn btn-primary" href="{% url 'register' %}">Регистрация</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Уведомления -->
+    <div class="container mt-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Основное содержимое -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Подвал сайта -->
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="mb-4">О Floral&Petal</h5>
+                    <p>Мы предлагаем свежие цветы и букеты для любого случая. Доставка по всему городу. Индивидуальный подход к каждому клиенту.</p>
+                    <div class="mt-3">
+                        <a href="#" class="social-icon" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon" title="Telegram">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="#" class="social-icon" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h5 class="mb-4">Навигация</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{% url 'home' %}">Главная</a></li>
+                        <li class="mb-2"><a href="{% url 'product_list' %}">Каталог</a></li>
+                        <li class="mb-2"><a href="{% url 'about' %}">О нас</a></li>
+                        <li class="mb-2"><a href="{% url 'contact' %}">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h5 class="mb-4">Категории</h5>
+                    <ul class="list-unstyled">
+                        {% for category in categories|slice:":5" %}
+                            <li class="mb-2"><a href="{% url 'product_list' %}?category={{ category.id }}">{{ category.name }}</a></li>
+                        {% empty %}
+                            <li>Нет доступных категорий</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h5 class="mb-4">Контакты</h5>
+                    <address>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> ул. Цветочная, 123</p>
+                        <p><i class="fas fa-phone me-2"></i> +7 (999) 123-45-67</p>
+                        <p><i class="fas fa-envelope me-2"></i> info@flowermagic.ru</p>
+                    </address>
+                </div>
+            </div>
+            <hr class="mt-4 mb-4 bg-light">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; {% now "Y" %} Floral&Petal. Все права защищены.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>Разработано с <i class="fas fa-heart" style="color: var(--primary-color);"></i></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS и Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <!-- Дополнительные скрипты для каждой страницы -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

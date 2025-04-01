@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Редактирование профиля - Цветочный Магазин{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Редактирование профиля</h1>
+    
+    <div class="row">
+        <!-- Profile Navigation -->
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Навигация</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'profile' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user me-2"></i> Профиль
+                    </a>
+                    <a href="{% url 'update_profile' %}" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-edit me-2"></i> Редактировать профиль
+                    </a>
+                    <a href="{% url 'update_shipping' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-truck me-2"></i> Адрес доставки
+                    </a>
+                    <a href="{% url 'change_password' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-key me-2"></i> Изменить пароль
+                    </a>
+                    <a href="{% url 'order_list' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-shopping-bag me-2"></i> Мои заказы
+                    </a>
+                    {% if user.profile.telegram_chat_id %}
+                        <a href="{% url 'disconnect_telegram' %}" class="list-group-item list-group-item-action">
+                            <i class="fab fa-telegram me-2"></i> Отключить Telegram
+                        </a>
+                    {% else %}
+                        <a href="{% url 'connect_telegram' %}" class="list-group-item list-group-item-action">
+                            <i class="fab fa-telegram me-2"></i> Подключить Telegram
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Profile Form -->
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Личные данные</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ u_form.first_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ u_form.last_name|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                {{ u_form.email|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ u_form.first_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ u_form.last_name|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        <h5 class="mb-3">Контактная информация</h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ p_form.phone|as_crispy_field }}
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'profile' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i> Назад
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i> Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

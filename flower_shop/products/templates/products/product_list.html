@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Каталог продукции{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Стили для активного элемента списка категорий */
+    .list-group-item.active {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    /* Стили для ховера на элементах списка */
+    .list-group-item:hover {
+        background-color: rgba(232, 74, 95, 0.05);
+    }
+
+    /* Убираем синий цвет из алерта с информацией */
+    .alert-info {
+        background-color: #f8f9fa;
+        border-color: #e9ecef;
+        color: var(--secondary-color);
+    }
+
+    /* Стили для карточек товаров */
+    .card {
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Стили для изображений товаров */
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px 8px 0 0;
+    }
+
+    /* Стили для названия категории */
+    h2 {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 1.5rem;
+    }
+
+    h2::after {
+        content: '';
+        position: absolute;
+        width: 50px;
+        height: 3px;
+        background-color: var(--primary-color);
+        bottom: -10px;
+        left: 0;
+    }
+
+    /* Исправление для hover эффекта на кнопке (текст становится черным) */
+    .btn-primary:hover {
+        background-color: #d43e53;
+        border-color: #d43e53;
+        color: #000000 !important; /* Черный текст при наведении */
+    }
+
+    /* Эти стили нужно добавить, чтобы переопределить стили Bootstrap */
+    .btn-primary {
+        color: white;
+        transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* Для кнопок внутри карточек продуктов */
+    .card .btn-primary:hover {
+        color: #000000 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Каталог</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Боковая панель с фильтрами -->
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Категории</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item {% if not category_slug %}active{% endif %}">
+                            <a href="{% url 'product_list' %}" class="text-decoration-none {% if not category_slug %}text-white{% endif %}">Все категории</a>
+                        </li>
+                        {% for category in categories %}
+                        <li class="list-group-item {% if category_slug == category.slug %}active{% endif %}">
+                            <a href="{% url 'product_list' %}?category={{ category.slug }}" class="text-decoration-none {% if category_slug == category.slug %}text-white{% endif %}">{{ category.name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Сортировка</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get">
+                        {% if category_slug %}<input type="hidden" name="category" value="{{ category_slug }}">{% endif %}
+                        {% if search_query %}<input type="hidden" name="search" value="{{ search_query }}">{% endif %}
+                        <select name="sort_by" class="form-select" onchange="this.form.submit()">
+                            <option value="name" {% if sort_by == 'name' %}selected{% endif %}>По названию</option>
+                            <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>По цене (возр.)</option>
+                            <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>По цене (убыв.)</option>
+                            <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Сначала новые</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Основной контент -->
+        <div class="col-md-9">
+            <!-- Заголовок и результаты поиска -->
+            <div class="mb-4">
+                <h2>{% if current_category %}{{ current_category.name }}{% else %}Все товары{% endif %}</h2>
+                {% if search_query %}
+                <p class="lead">Результаты поиска по запросу: "{{ search_query }}"</p>
+                {% endif %}
+            </div>
+
+            <!-- Товары -->
+            <div class="row">
+                {% if products %}
+                    {% for product in products %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <a href="{{ product.get_absolute_url }}">
+                                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                            </a>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.short_description }}</p>
+                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                    <span class="h5 mb-0">{{ product.price }} ₽</span>
+                                    <a href="{% url 'add_to_cart' product.id %}?next={{ request.path }}" class="btn btn-primary">В корзину</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <h4 class="alert-heading">Товары не найдены</h4>
+                            <p>По вашему запросу ничего не найдено. Попробуйте изменить параметры поиска или выбрать другую категорию.</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

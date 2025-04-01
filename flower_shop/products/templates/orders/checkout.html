@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Оформление заказа - Цветочный Магазин{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Настройка цвета для радио-кнопок и чекбоксов */
+    .form-check-input:checked {
+        background-color: #e84a5f;
+        border-color: #e84a5f;
+    }
+
+    .form-check-input:focus {
+        border-color: #e84a5f;
+        box-shadow: 0 0 0 0.25rem rgba(232, 74, 95, 0.25);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="mb-3">Оформление заказа</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'cart' %}">Корзина</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Оформление заказа</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <form method="post" action="{% url 'place_order' %}">
+            {% csrf_token %}
+
+            <div class="row">
+                <!-- Форма оформления заказа -->
+                <div class="col-lg-8 mb-4">
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Контактная информация</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.first_name|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.last_name|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.email|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.phone|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Адрес доставки</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                {{ form.address|as_crispy_field }}
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.city|as_crispy_field }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.postal_code|as_crispy_field }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form.country|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <!-- Резюме заказа -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Ваш заказ</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Товар</th>
+                                            <th>Кол-во</th>
+                                            <th>Сумма</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in cart_items %}
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div>
+                                                            <h6 class="mb-0 small">{{ item.product.name }}</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>{{ item.quantity }}</td>
+                                                <td>{{ item.total_price }} ₽</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot class="table-light">
+                                        <tr>
+                                            <td colspan="2" class="text-end"><strong>Доставка:</strong></td>
+                                            <td>{{ shipping_cost }} рублей</td>
+                                        </tr>
+                                        <tr class="border-top">
+                                            <td colspan="2" class="text-end"><strong>Итого к оплате:</strong></td>
+                                            <td><strong>{{ total }} ₽</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Выбор способа оплаты -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Способ оплаты</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="payment_method" id="payment1" value="card" checked>
+                                <label class="form-check-label" for="payment1">
+                                    <i class="fas fa-credit-card me-2"></i> Банковская карта
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment_method" id="payment2" value="cash">
+                                <label class="form-check-label" for="payment2">
+                                    <i class="fas fa-money-bill-wave me-2"></i> Наличными при получении
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Кнопка оформления заказа -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    Я согласен с <a href="#">условиями использования</a> и <a href="#">политикой конфиденциальности</a>
+                                </label>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-check me-2"></i> Подтвердить заказ
+                                </button>
+                            </div>
+                            <div class="text-center mt-3">
+                                <a href="{% url 'cart' %}" class="text-decoration-none">
+                                    <i class="fas fa-arrow-left me-1"></i> Вернуться в корзину
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

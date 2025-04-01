@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}О нас - Цветочный Магазин{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h1 class="display-4 mb-3">О нашем магазине</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">О нас</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2>Наша история</h2>
+                <p class="lead">Мы создаем красоту и радость с 2010 года</p>
+                <p>Наш цветочный магазин был основан в 2010 году с простой миссией — делиться красотой цветов и дарить радость людям. Начав с небольшого магазинчика в центре города, мы выросли в сеть бутиков, но сохранили ключевые ценности: внимание к деталям, качество и индивидуальный подход к каждому клиенту.</p>
+                <p>За эти годы мы собрали команду талантливых флористов, которые не просто собирают букеты, а создают настоящие произведения искусства. Мы работаем с лучшими поставщиками со всего мира, чтобы предлагать вам только самые свежие и красивые цветы.</p>
+            </div>
+            <div class="col-lg-6">
+                <img src="{% static 'images/about1.jpg' %}" alt="История магазина" class="img-fluid rounded shadow">
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="mb-4">Наша миссия</h2>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <p class="lead">Мы стремимся сделать мир ярче и красивее через искусство флористики. Наша миссия — помогать людям выражать свои чувства и эмоции через цветы, создавая неповторимые и запоминающиеся моменты.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="display-4 text-primary mb-3">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h4 class="card-title">Качество</h4>
+                        <p class="card-text">Мы тщательно отбираем каждый цветок, работая только с надежными поставщиками, которые разделяют наши ценности. Это позволяет нам гарантировать свежесть и долговечность наших букетов.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="display-4 text-primary mb-3">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h4 class="card-title">Творчество</h4>
+                        <p class="card-text">Наши флористы — настоящие художники, которые постоянно совершенствуют свое мастерство и следят за мировыми трендами. Мы создаем не просто букеты, а истории, рассказанные языком цветов.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <div class="display-4 text-primary mb-3">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h4 class="card-title">Забота</h4>
+                        <p class="card-text">Мы вкладываем душу в каждый букет и относимся к вашим пожеланиям с особым вниманием. Наша цель — не просто продать букет, а помочь вам передать свои чувства через цветы.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
+                <h2>Наша команда</h2>
+                <p class="lead">Профессионалы, влюбленные в свое дело</p>
+                <p>В нашей команде работают талантливые флористы с многолетним опытом работы, которые постоянно совершенствуют свое мастерство. Мы регулярно участвуем в мастер-классах, конкурсах и выставках, чтобы быть в курсе последних тенденций в мире флористики.</p>
+                <p>Каждый член нашей команды вносит свой уникальный вклад в работу магазина, но всех нас объединяет одно — искренняя любовь к цветам и желание делиться этой любовью с вами.</p>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <img src="{% static 'images/team.jpg' %}" alt="Наша команда" class="img-fluid rounded shadow">
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12 text-center mb-4">
+                <h2>Наши услуги</h2>
+                <p class="lead">Комплексный подход к любым цветочным решениям</p>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 service-card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="service-icon rounded-circle bg-primary-light mb-3 mx-auto">
+                            <i class="fas fa-gift text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Букеты на заказ</h4>
+                        <p class="card-text">Создаем уникальные композиции любой сложности по вашим пожеланиям с учетом повода, предпочтений и бюджета.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 service-card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="service-icon rounded-circle bg-primary-light mb-3 mx-auto">
+                            <i class="fas fa-glass-cheers text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Свадебная флористика</h4>
+                        <p class="card-text">Полное оформление свадебных торжеств: от букета невесты до декора зала, с учетом стиля и цветовой гаммы мероприятия.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 service-card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="service-icon rounded-circle bg-primary-light mb-3 mx-auto">
+                            <i class="fas fa-calendar-day text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Оформление мероприятий</h4>
+                        <p class="card-text">Создаем атмосферу для ваших праздников через цветочное оформление корпоративов, юбилеев и тематических вечеринок.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 service-card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="service-icon rounded-circle bg-primary-light mb-3 mx-auto">
+                            <i class="fas fa-truck text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Доставка цветов</h4>
+                        <p class="card-text">Оперативная доставка букетов и композиций по городу в удобное для вас время с возможностью отследить статус заказа.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 service-card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="service-icon rounded-circle bg-primary-light mb-3 mx-auto">
+                            <i class="fas fa-box-open text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Подарочные наборы</h4>
+                        <p class="card-text">Комплексные подарочные решения, включающие цветы, конфеты, фрукты и другие презенты в стильном оформлении.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 service-card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="service-icon rounded-circle bg-primary-light mb-3 mx-auto">
+                            <i class="fas fa-seedling text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Консультации по уходу</h4>
+                        <p class="card-text">Профессиональные рекомендации по уходу за срезанными цветами и растениями для продления их свежести и красоты.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body p-5 text-center">
+                        <h3 class="mb-4">Доверьте свои эмоции профессионалам</h3>
+                        <p class="lead mb-4">Независимо от повода — будь то свадьба, юбилей, день рождения или просто желание порадовать близкого человека — мы поможем выбрать или создать идеальный букет, который выразит ваши чувства.</p>
+                        <a href="{% url 'product_list' %}" class="btn btn-primary btn-lg">Перейти в каталог</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .bg-primary-light {
+            background-color: rgba(232, 74, 95, 0.1);
+        }
+        .service-card {
+            transition: transform 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+{% endblock %}
