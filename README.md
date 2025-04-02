@@ -60,9 +60,9 @@ python manage.py runserver
 python telegram_bot/bot.py
 ```
 
-### 👥 Авторы
+### 👥 Автор
 
-- [@your_username](https://github.com/Larisa-coding)
+- https://github.com/Larisa-coding
 
 ### 📄 Лицензия
 
